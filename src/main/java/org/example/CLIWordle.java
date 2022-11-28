@@ -11,12 +11,13 @@ import java.util.List;
 public class CLIWordle {
 
     private static Wordle engine = new Wordle();
-    private static Guess guessengine = new Guess();
     private static boolean win = false;
 
     public static final String ANSI_YELLOW = "\u001B[33m";
     public static final String ANSI_GREEN = "\u001B[32m";
     public static final String ANSI_RESET = "\u001B[0m";
+
+    static Exception InvalidInputException;
     
     public static Wordle createGame() {
         return new Wordle();
@@ -25,7 +26,10 @@ public class CLIWordle {
     public static void main(String[] args) throws IOException {
         // engine = createGame();
 
-        runGame();
+        // safe as it exits if necessary in runGame()
+        while (true) {
+            runGame();
+        }
 
         
     }
@@ -94,12 +98,11 @@ public class CLIWordle {
             }
         
         }
-
         return guess;
     }
 
     public static List<Integer> checkGuess(String guess) {
-        return Guess.returnGuess(engine.getWords(), guess, engine.getIndex());
+        return Guess.returnGuess(engine.getWord(), guess);
     }
 
     public static void printGuess(List<Integer> result, String guess) {

@@ -40,11 +40,15 @@ public class Wordle {
         return words;
     }
 
+    public String getWord() {
+        return words.get(index);
+    }
+
     public static class Guess {
         private static List<Integer> result = new ArrayList<Integer>();
 
-        public static List<Integer> returnGuess(List<String> words, String guess, int index) {
-            guessCheck(words, guess, index);
+        public static List<Integer> returnGuess(String word, String guess) {
+            guessCheck(word, guess);
             return result;
         }
 
@@ -59,8 +63,9 @@ public class Wordle {
             return true;
         }
 
-        public static void guessCheck(List<String> words, String guess, int index) {
-            String word = words.get(index);
+        public static void guessCheck(String word, String guess) {
+
+            result = new ArrayList<Integer>();
 
             for (int j = 0; j < guess.length(); j++) {
                 if (guess.charAt(j) == word.charAt(j)) {
@@ -77,7 +82,7 @@ public class Wordle {
     
     public List<Integer> getGuess(String guess) {
         this.guesses += 1;
-        return Guess.returnGuess(this.words, guess, this.index);
+        return Guess.returnGuess(getWord(), guess);
     }
 
     public int returnGuesses() {
