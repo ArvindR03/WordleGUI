@@ -12,7 +12,7 @@ public class Wordle {
 
     public Wordle() {
         initialiseWords();
-
+        setIndex();
     }
 
     public void initialiseWords() {
@@ -33,7 +33,7 @@ public class Wordle {
 
     public void setIndex() {
         Random rd = new Random();
-        index = rd.nextInt(0); // words.size() - 1
+        index = rd.nextInt(words.size() - 1); // words.size() - 1
     }
 
     public List<String> getWords() {

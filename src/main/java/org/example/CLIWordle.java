@@ -29,6 +29,7 @@ public class CLIWordle {
         // safe as it exits if necessary in runGame()
         while (true) {
             runGame();
+            engine.setIndex();
         }
 
         
@@ -49,7 +50,7 @@ public class CLIWordle {
                 win = true;
             }
             else {
-                System.out.print("Try again...");
+                System.out.print("\nTry again...");
                 continue;
             }
         }
@@ -85,10 +86,11 @@ public class CLIWordle {
         BufferedReader b = new BufferedReader(new InputStreamReader(System.in));
 
         while (guess == "") {
-            System.out.println("Please guess a word (between 5 letters, lowercase):");
+            System.out.println("\nPlease guess a word (between 5 letters, lowercase):");
             guess = b.readLine();
 
             // TODO: add check to make sure that it is only characters from alphabet
+            // TODO: catch invalid input exceptions
             if (guess == null) {
                 System.out.println("Please input something!");
             } else if (guess.length() != 5) {
