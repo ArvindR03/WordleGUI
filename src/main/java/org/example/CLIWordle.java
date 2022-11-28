@@ -1,0 +1,122 @@
+package org.example;
+import org.example.Wordle;
+import org.example.Wordle.Guess;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.time.Year;
+import java.util.List;
+
+public class CLIWordle {
+
+    private static Wordle engine = new Wordle();
+    private static Guess guessengine = new Guess();
+    private static boolean win = false;
+
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_RESET = "\u001B[0m";
+    
+    public static Wordle createGame() {
+        return new Wordle();
+    }
+
+    public static void main(String[] args) throws IOException {
+        // engine = createGame();
+
+        runGame();
+
+        
+    }
+
+    // TODO: fix the error that the result list doesn't seem to change after first try
+    public static void runGame() throws IOException {
+        boolean wantsToPlay = !(askPlay());
+        if (wantsToPlay == false) {
+            System.exit(0);
+        }
+        while (win == false) {
+            String guess = askGuess();
+            List<Integer> result = checkGuess(guess);
+            printGuess(result, guess);
+            if (Guess.checkCorrect(result) == true) {
+                System.out.println("Well done, you've guessed the word correctly!");
+                win = true;
+            }
+            else {
+                System.out.print("Try again...");
+                continue;
+            }
+        }
+    }
+
+    public static boolean askPlay() throws IOException {
+        boolean invalid = true;
+        BufferedReader b = new BufferedReader(new InputStreamReader(System.in));
+
+        while (invalid) {
+            System.out.println("Would you like to play a(nother) round? (y/n)");
+            String check = b.readLine();
+            if (check != null) {
+                if (check.charAt(0) == 'y') {
+                    invalid = false;
+                } else if (check.charAt(0) == 'n') {
+                    System.exit(0);
+                } else {
+                    System.out.print("Sorry but this is an invalid input, please enter either y or n.");
+                }
+            } else {
+                System.out.println("Please input something!");
+            }
+
+        }
+
+        return invalid;
+
+    }
+
+    public static String askGuess() throws IOException {
+        String guess = "";
+        BufferedReader b = new BufferedReader(new InputStreamReader(System.in));
+
+        while (guess == "") {
+            System.out.println("Please guess a word (between 5 letters, lowercase):");
+            guess = b.readLine();
+
+            // TODO: add check to make sure that it is only characters from alphabet
+            if (guess == null) {
+                System.out.println("Please input something!");
+            } else if (guess.length() != 5) {
+                System.out.println("Please input a 5 letter word!");
+            } else {
+                guess = guess.toLowerCase();
+            }
+        
+        }
+
+        return guess;
+    }
+
+    public static List<Integer> checkGuess(String guess) {
+        return Guess.returnGuess(engine.getWords(), guess, engine.getIndex());
+    }
+
+    public static void printGuess(List<Integer> result, String guess) {
+        for (int i = 0; i < 5; i++) {
+            char c = guess.charAt(i);
+            int r = result.get(i);
+            
+            if (r == -1) {
+                System.out.print(c);
+            } else if (r == 0) {
+                System.out.print(ANSI_YELLOW + c + ANSI_RESET);
+            } else if (r == 1) {
+                System.out.print(ANSI_GREEN + c + ANSI_RESET);
+            }
+        }
+    }
+
+
+
+}
