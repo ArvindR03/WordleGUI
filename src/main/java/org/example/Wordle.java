@@ -7,7 +7,8 @@ import java.util.Random;
 public class Wordle {
 
     private List<String> words = new ArrayList<String>();
-    private int guesses = 0;
+    private static int guesses = 0; // correct guesses
+    private static int tries = 0;
     private int index = 0;
 
     public Wordle() {
@@ -48,7 +49,11 @@ public class Wordle {
         private static List<Integer> result = new ArrayList<Integer>();
 
         public static List<Integer> returnGuess(String word, String guess) {
+            tries += 1;
             guessCheck(word, guess);
+            if (checkCorrect(result)) {
+                guesses += 1;
+            }
             return result;
         }
 
@@ -81,12 +86,16 @@ public class Wordle {
 
     
     public List<Integer> getGuess(String guess) {
-        this.guesses += 1;
-        return Guess.returnGuess(getWord(), guess);
+        List<Integer> result = Guess.returnGuess(getWord(), guess);
+        return result;
     }
 
-    public int returnGuesses() {
-        return this.guesses;
+    public static int returnGuesses() {
+        return guesses;
+    }
+
+    public static int returnTries() {
+        return tries;
     }
 
 }

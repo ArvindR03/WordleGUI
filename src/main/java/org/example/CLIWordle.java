@@ -28,6 +28,7 @@ public class CLIWordle {
 
         // safe as it exits if necessary in runGame()
         while (true) {
+            win = false;
             runGame();
             engine.setIndex();
         }
@@ -56,6 +57,13 @@ public class CLIWordle {
         }
     }
 
+    public static void quitApp(boolean v) {
+        if (v) {
+            System.out.println("You attempted " + Integer.toString(engine.returnTries()) + " guess(es), and got " + Integer.toString(engine.returnGuesses()) + " correct.");
+            System.exit(0);
+        }
+    }
+
     public static boolean askPlay() throws IOException {
         boolean invalid = true;
         BufferedReader b = new BufferedReader(new InputStreamReader(System.in));
@@ -67,7 +75,7 @@ public class CLIWordle {
                 if (check.charAt(0) == 'y') {
                     invalid = false;
                 } else if (check.charAt(0) == 'n') {
-                    System.exit(0);
+                    quitApp(true);;
                 } else {
                     System.out.print("Sorry but this is an invalid input, please enter either y or n.");
                 }
@@ -82,10 +90,11 @@ public class CLIWordle {
     }
 
     public static String askGuess() throws IOException {
+        boolean invalid = true;
         String guess = "";
         BufferedReader b = new BufferedReader(new InputStreamReader(System.in));
 
-        while (guess == "") {
+        while ((guess == "") | (invalid)) {
             System.out.println("\nPlease guess a word (between 5 letters, lowercase):");
             guess = b.readLine();
 
@@ -95,8 +104,10 @@ public class CLIWordle {
                 System.out.println("Please input something!");
             } else if (guess.length() != 5) {
                 System.out.println("Please input a 5 letter word!");
+                continue;
             } else {
                 guess = guess.toLowerCase();
+                invalid = false;
             }
         
         }
