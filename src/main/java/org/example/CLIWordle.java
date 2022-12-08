@@ -1,11 +1,9 @@
 package org.example;
-import org.example.Wordle;
 import org.example.Wordle.Guess;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.time.Year;
 import java.util.List;
 
 public class CLIWordle {
@@ -59,7 +57,7 @@ public class CLIWordle {
 
     public static void quitApp(boolean v) {
         if (v) {
-            System.out.println("You attempted " + Integer.toString(engine.returnTries()) + " guess(es), and got " + Integer.toString(engine.returnGuesses()) + " correct.");
+            System.out.println("You attempted " + Integer.toString(Wordle.returnTries()) + " guess(es), and got " + Integer.toString(Wordle.returnGuesses()) + " correct.");
             System.exit(0);
         }
     }
