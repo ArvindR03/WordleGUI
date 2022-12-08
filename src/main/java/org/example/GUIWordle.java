@@ -3,6 +3,7 @@ package org.example;
 import javax.swing.*;
 import javax.swing.border.Border;
 
+import org.example.Wordle.Guess;
 import org.example.components.Word;
 
 import java.awt.*;
@@ -20,6 +21,7 @@ public class GUIWordle {
     private JButton resetButton;
     private JLabel statisticsLabel;
     private JTextField inputField;
+    private boolean hasWon = false;
 
     private Wordle engine = new Wordle();
 
@@ -78,14 +80,19 @@ public class GUIWordle {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (inputField.getText().length() == 5) {
-                    String inp = inputField.getText();
+
+                String inp = inputField.getText();
+
+                if (inputField.getText().length() == 5 & engine.checkIfWord(inp) & !hasWon) {
                     renderWord(inp);
                     statisticsLabel.setText("Number of wins: " + Wordle.returnGuesses() + " \nNumber of tries: " + (Wordle.returnTries() - 1));
                     inputField.setText("");
                     historyLabelText += inp;
                     historyLabelText += ", ";
                     addHistory();
+                    if (Guess.checkCorrect(engine.getGuess(inp))) {
+                        hasWon = true;
+                    }
                 }
             }
             

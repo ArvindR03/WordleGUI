@@ -1,5 +1,9 @@
 package org.example;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -16,16 +20,42 @@ public class Wordle {
         setIndex();
     }
 
+    public boolean checkIfWord(String word) {
+        if (words.contains(word)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public void initialiseWords() {
         // TODO: implement file reading from the text file in resources
-        words.add(new String("hello"));
+        /*words.add(new String("hello"));
         words.add(new String("cakes"));
         words.add(new String("spike"));
         words.add(new String("water"));
         words.add(new String("bikes"));
         words.add(new String("bears"));
         words.add(new String("truck"));
-        words.add(new String("paper"));
+        words.add(new String("paper"));*/
+        String filename = "src/main/resources/words.txt";
+        BufferedReader br = null;
+        String line = "";
+        try {
+            br = new BufferedReader(new FileReader(filename));
+            while( (line = br.readLine()) != null){
+                // System.out.println(line);
+                if (line.length() == 5) {
+                    words.add(line);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("Oops! Please check for the presence of file in the path specified.");
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.err.println("Oops! Unable to read the file.");
+            e.printStackTrace();
+        }
     }
 
     public int getIndex() {
