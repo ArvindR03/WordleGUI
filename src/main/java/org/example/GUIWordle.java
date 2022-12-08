@@ -1,6 +1,7 @@
 package org.example;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 
 import org.example.components.Word;
 
@@ -13,7 +14,8 @@ public class GUIWordle {
     private JFrame frame;
     private JPanel wordpanel = new JPanel();
     private JPanel menupanel = new JPanel();
-    private JPanel innermenupanel = new JPanel();
+    private JTextArea historyLabel;
+    private String historyLabelText = "Words: ";
     private Word word = new Word();
     private JButton resetButton;
     private JLabel statisticsLabel;
@@ -23,11 +25,13 @@ public class GUIWordle {
 
     public GUIWordle() {
 
+        //TODO: implement a way to view word history
+
         this.frame = new JFrame();
 
         frame.setLayout(new BorderLayout(10, 5));
         frame.setTitle("Wordle");
-        frame.setSize(300, 200);
+        frame.setSize(300, 300);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -50,6 +54,17 @@ public class GUIWordle {
 
     }
 
+    public void generateHistory() {
+        historyLabel = new JTextArea();
+        historyLabel.setText(historyLabelText);
+        historyLabel.setEditable(false);
+        historyLabel.setLineWrap(true);
+    }
+
+    public void addHistory() {
+        historyLabel.setText(historyLabelText);
+    }
+
     public void renderMenu() {
         // onetime call
 
@@ -64,9 +79,13 @@ public class GUIWordle {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (inputField.getText().length() == 5) {
-                    renderWord(inputField.getText());
+                    String inp = inputField.getText();
+                    renderWord(inp);
                     statisticsLabel.setText("Number of wins: " + Wordle.returnGuesses() + " \nNumber of tries: " + (Wordle.returnTries() - 1));
                     inputField.setText("");
+                    historyLabelText += inp;
+                    historyLabelText += ", ";
+                    addHistory();
                 }
             }
             
@@ -82,17 +101,25 @@ public class GUIWordle {
                 resetWord();
                 inputField.setText("");
                 engine.setIndex();
+                historyLabelText = "Words: ";
+                historyLabel.setText(historyLabelText);
             }
             
         };
 
         resetButton.addActionListener(resetAction);
 
+        generateHistory();
+
+        menupanel.add(historyLabel);
         menupanel.add(resetButton);
         menupanel.add(statisticsLabel);
         menupanel.add(inputField);
         GridLayout grid = new GridLayout(0, 1);
         menupanel.setLayout(grid);
+        menupanel.setBackground(Color.LIGHT_GRAY);
+        Border border = BorderFactory.createLineBorder(Color.BLACK);
+        menupanel.setBorder(border);
 
         frame.add(menupanel, BorderLayout.SOUTH);
 
